@@ -33,7 +33,7 @@ router.post('/authenticate', (req, res, next) => {
         User.comparePassword(password, user.password, (err, isMatch) => {
             if(err) throw err;
             if(isMatch) {
-                const token = jwt.sign({ data: user }, config.secret, {
+                const token = jwt.sign( user.toJSON() , config.secret, {
                     expiresIn: 604800 // 1 week
                 });
 
@@ -52,13 +52,13 @@ router.post('/authenticate', (req, res, next) => {
     });
 });
 
-// GET: profile
-/*router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    res.json({ user: req.user });
-});*/
-
-router.get('/profile', (req, res, next) => {
-    res.json({ user: req.user });
+//GET: profilepassport
+router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
+    res.send('');
 });
+
+// router.get('/profile', (req, res, next) => {
+//     res.json({ user: req.user });
+// });
 
 module.exports = router;
